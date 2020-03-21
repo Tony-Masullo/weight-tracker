@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -8,10 +8,11 @@ import { Chart } from 'chart.js';
 })
 export class WeightInputComponent implements OnInit {
 
-  //LineChart = [];
   chart: any;
-  //dataPoints: [9, 7, 3, 5, 2, 10, 15, 16, 19, 3, 1, 9];
- // labels: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  weightToAdd = '';
+  bodyFatToAdd = 0;
+  dateToAdd = '';
 
   constructor() { }
 
@@ -19,10 +20,10 @@ export class WeightInputComponent implements OnInit {
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
-        labels: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"], // your labels array
+        labels: [], // your labels array
         datasets: [
           {
-            data: [9, 7, 3, 5, 2, 10, 15, 16, 19, 3, 1, 9], // your data array
+            data: [], // your data array
             borderColor: 'red',
             fill: false
           }
@@ -42,5 +43,18 @@ export class WeightInputComponent implements OnInit {
         }
       }
     });
+  }
+
+  public onKey(event: any) { // without type info
+    this.weightToAdd = event.target.value;
+  }
+
+  public addData() {
+    this.chart.data.labels.push(this.bodyFatToAdd++);
+    this.chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(this.weightToAdd);
+    });
+    this.chart.update();
+    this.weightToAdd = '';
   }
 }
