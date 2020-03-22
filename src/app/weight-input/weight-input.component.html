@@ -11,27 +11,32 @@
         <div class="form-group">
           <label for="example-number-input" class="col-form-label">Weight (lbs)</label>
           <div>
-            <input class="form-control" type="number" placeholder="" (keyup)='onKey($event)' id="weightInput">
+            <input #weight class="form-control" type="number" placeholder="190" id="weightInput">
           </div>
         </div>
         <div class="form-group">
           <label for="example-number-input" class="col-form-label">Body Fat Percentage (%)</label>
           <div>
-            <input class="form-control" type="number" placeholder="" id="bodyFatInput">
+            <input #bodyFat class="form-control" type="number" placeholder="20" id="bodyFatInput">
           </div>
         </div>
         <div class="form-group">
           <label for="example-date-input" class="col-form-label">Date</label>
-          <input class="form-control" type="date" placeholder='' id="example-date-input">
+          <input #date class="form-control" type="date" placeholder='' id="example-date-input">
         </div>
 
-        <button type="button" class="btn btn-primary" (click)="addData()">Add Weight</button>
+        <button type="button" (click)='submitWeight(weight.value, bodyFat.value, date.value)'class="btn btn-primary">Add Weight</button>
 
       </form>
     </div>
 
     <div class='flex-fill border border-primary rounded m-1 p-2'>
-        <canvas id="canvas"></canvas>
+     
+        <canvas id="weightCanvas"></canvas>
+    
+     <!-- <div class='row d-flex'>
+        <canvas id="bodyFatCanvas"></canvas>
+      </div> -->
     </div>
   </div>
 </div>
