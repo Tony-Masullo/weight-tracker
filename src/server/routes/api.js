@@ -133,6 +133,7 @@ router.get('/events', (req, res) => {
 
 // verifyToken middleware is exectuted before the api code
 // so if user enters invalid token, api won't execute at all
+// add verifyToken as secod parameter
 router.get('/special', verifyToken, (req, res) => {
   let specialEvents = [{
       "_id": "1",

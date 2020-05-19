@@ -9,7 +9,5 @@ import { AuthService } from './auth.service';
 export class AppComponent {
   title = 'weight-tracker';
 
-  constructor(private _authService: AuthService){
-    
-  }
+  constructor(public _authService: AuthService){}
 }

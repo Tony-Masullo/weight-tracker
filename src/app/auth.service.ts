@@ -30,7 +30,8 @@ export class AuthService {
 
   logoutUser(){
     localStorage.removeItem('token')
-    this._router.navigate(['/events'])
+    // change events to login screen
+    this._router.navigate(['/home-page'])
   }
 
   getToken(){

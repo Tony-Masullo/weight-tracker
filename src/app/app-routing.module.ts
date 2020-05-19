@@ -6,26 +6,32 @@ import { SpecialEventsComponent } from './special-events/special-events.componen
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './auth.guard';
+import { HomePageComponent } from './home-page/home-page.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/events',
+    redirectTo: '/home-page',
     pathMatch: 'full'
   },
   {
+    path: 'home-page',
+    component: HomePageComponent,
+  },
+  {
     path: 'weight-input',
-    component: WeightInputComponent
-  },
-  {
-    path: 'events',
-    component: EventsComponent
-  },
-  {
-    path: 'special',
-    component: SpecialEventsComponent,
+    component: WeightInputComponent,
     canActivate: [AuthGuard]
   },
+  // {
+  //   path: 'events',
+  //   component: EventsComponent
+  // },
+  // {
+  //   path: 'special',
+  //   component: SpecialEventsComponent,
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'login',
     component: LoginComponent
