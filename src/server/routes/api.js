@@ -2,6 +2,7 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const User = require('../models/user')
+const Weight = require('../models/weight-data')
 const mongoose = require('mongoose')
 const db = "mongodb+srv://userTony:passwordTony@eventsdb-x7hd7.mongodb.net/test?retryWrites=true&w=majority"
 const options = {
@@ -37,6 +38,19 @@ function verifyToken(req, res, next) {
 
 router.get('/', (req, res) => {
   res.send('From API route')
+})
+
+router.post('/weight-input', (req, res) =>{
+  let weightData = req.body
+  let weight = new Weight(weightData)
+  weight.save((error, savedWeight) =>{
+    if (error){
+      console.log(error)
+    }
+    else {
+      res.status(200).send(savedWeight)
+    }
+  })
 })
 
 router.post('/register', (req, res) => {
