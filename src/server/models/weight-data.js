@@ -7,8 +7,9 @@ const weightDataSchema = new Schema({
     date: Date,
     person: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "user"
     }
 })
 
+// ref is name of model being refered to i.e. 'user' model
 module.exports = mongoose.model('weight-data', weightDataSchema, 'weight-data')

@@ -6,8 +6,9 @@ const userSchema = new Schema({
     password: String,
     weights: [{
         type: Schema.Types.ObjectId,
-        ref: "WeightData"
+        ref: "weight-data"
     }]
 })
 
+// ref is name of model being refered to i.e. 'weight-data' model
 module.exports = mongoose.model('user', userSchema, 'users')

@@ -43,14 +43,43 @@ router.get('/', (req, res) => {
 router.post('/weight-input', (req, res) =>{
   let weightData = req.body
   let weight = new Weight(weightData)
+  const userID = req.params.person
+  const weightID = weight._id
+  // let user = User.findById(weightData.person)
+  // const users = mongoose.connection.collection('users')
   weight.save((error, savedWeight) =>{
     if (error){
       console.log(error)
     }
     else {
+      // user.update(
+      //   {$push: {weight: weight}}
+      // )
       res.status(200).send(savedWeight)
+      User.update(
+        { _id: userID}, 
+        {
+          $push: {weights: weightID}
+        }
+      )
     }
   })
+
+})
+
+router.get('/user', (req, res) => {
+  User.find()
+    .exec()
+    .then(docs => {
+      console.log(docs)
+      res.status(200).json(docs)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({
+        error: err
+      })
+    })
 })
 
 router.post('/register', (req, res) => {
