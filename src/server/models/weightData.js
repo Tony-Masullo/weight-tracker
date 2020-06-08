@@ -12,4 +12,4 @@ const weightDataSchema = new Schema({
 })
 
 // ref is name of model being refered to i.e. 'user' model
-module.exports = mongoose.model('weight-data', weightDataSchema, 'weight-data')
+module.exports = mongoose.model('weightData', weightDataSchema, 'weightData')

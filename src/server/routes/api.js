@@ -2,13 +2,15 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const User = require('../models/user')
-const Weight = require('../models/weight-data')
+const Weight = require('../models/weightData')
 const mongoose = require('mongoose')
 const db = "mongodb+srv://userTony:passwordTony@eventsdb-x7hd7.mongodb.net/test?retryWrites=true&w=majority"
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false 
 }
+//var objectId = require('mongodb').ObjectID
 
 mongoose.connect(db, options, err => {
   if (err) {
@@ -40,39 +42,31 @@ router.get('/', (req, res) => {
   res.send('From API route')
 })
 
-router.post('/weight-input', (req, res) =>{
-  let weightData = req.body
-  let weight = new Weight(weightData)
-  const userID = req.params.person
-  const weightID = weight._id
-  // let user = User.findById(weightData.person)
-  // const users = mongoose.connection.collection('users')
-  weight.save((error, savedWeight) =>{
-    if (error){
-      console.log(error)
-    }
-    else {
-      // user.update(
-      //   {$push: {weight: weight}}
-      // )
-      res.status(200).send(savedWeight)
-      User.update(
-        { _id: userID}, 
-        {
-          $push: {weights: weightID}
-        }
-      )
-    }
-  })
-
+// route to create weight and update user's weight array with it
+router.post('/user/:id', function(req, res){
+  Weight.create(req.body)
+    .then(function(dbWeight){
+      return User.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$push: {weights: dbWeight._id}}, 
+        {new: true})
+    })
+    .then(function(dbUser){
+      res.json(dbUser)
+    })
+    .catch(function(err){
+      res.json(err)
+    })
 })
 
 router.get('/user', (req, res) => {
-  User.find()
+  User.find({})
+    // populate shows the contents of the weight object rather than just the id
+    .populate('weights')
     .exec()
-    .then(docs => {
-      console.log(docs)
-      res.status(200).json(docs)
+    .then(users => {
+      console.log(users)
+      res.status(200).json(users)
     })
     .catch(err => {
       console.log(err)

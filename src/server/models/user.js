@@ -6,7 +6,7 @@ const userSchema = new Schema({
     password: String,
     weights: [{
         type: Schema.Types.ObjectId,
-        ref: "weight-data"
+        ref: "weightData"
     }]
 })
 
