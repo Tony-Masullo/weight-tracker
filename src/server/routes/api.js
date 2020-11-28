@@ -58,6 +58,22 @@ router.post('/user/:id', function(req, res){
       res.json(err)
     })
 })
+router.get('/user/:id', (req, res) => {
+  User.find({_id: req.params.id})
+    // populate shows the contents of the weight object rather than just the id
+    .populate('weights')
+    .exec()
+    .then(user => {
+      console.log(user)
+      res.status(200).json(user)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({
+        error: err
+      })
+    })
+})
 
 router.get('/user', (req, res) => {
   User.find({})
@@ -118,8 +134,12 @@ router.post('/login', (req, res) => {
           subject: user._id
         }
         let token = jwt.sign(payload, 'secretKey')
+        jwt.verify(token, 'secretKey', function(err, decoded) {
+          console.log(decoded.subject) // bar
+        });
         res.status(200).send({
-          token
+          id: user._id,
+          token: token
         })
         //res.status(200).send(user)
       }

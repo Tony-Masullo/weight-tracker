@@ -23,15 +23,11 @@ const routes: Routes = [
     component: WeightInputComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'events',
-  //   component: EventsComponent
-  // },
-  // {
-  //   path: 'special',
-  //   component: SpecialEventsComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'weight-input/:id',
+    component: WeightInputComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'login',
     component: LoginComponent

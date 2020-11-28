@@ -26,7 +26,10 @@ export class LoginComponent implements OnInit {
         res => {
           console.log(res)
           localStorage.setItem('token', res.token)
-          this._router.navigate(['/weight-input'])
+          localStorage.setItem('id', res.id)
+          //console.log('userId = ' + localStorage.getItem('id'))
+          //console.log('local storage: ' + localStorage.getItem('token'))
+          this._router.navigate(['/weight-input/'])
         },
         err => console.log(err)
     )
