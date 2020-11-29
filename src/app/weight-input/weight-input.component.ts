@@ -13,8 +13,8 @@ export class WeightInputComponent implements OnInit {
   weightChart: any;
   bodyFatChart: any;
 
-  submittedWeights = {};
-   weightToAdd = '';
+  submittedWeights = [];
+   weightToAdd = {};
    bodyFatToAdd = '';
   // dateToAdd = '';
   increment = 0;
@@ -25,11 +25,15 @@ export class WeightInputComponent implements OnInit {
   ngOnInit(): void {
     this._weightsService.getWeights(localStorage.getItem('id'))  
       .subscribe(
-        //res => this.submittedWeights = res, 
-        res => console.log(res),
+        res => {
+          //console.log(res[0].weights)
+          this.submittedWeights = res[0].weights
+          console.log(this.submittedWeights)
+          this.loadSubmittedWeights()
+        },
         err => console.log(err)
       );
-      console.log('id = ' + localStorage.getItem('id'))
+      //console.log('id = ' + localStorage.getItem('id'))
       //console.log(this.submittedWeights);
       //console.log('submitted weights above')
     this.weightChart = new Chart('weightCanvas', {
@@ -68,43 +72,33 @@ export class WeightInputComponent implements OnInit {
         }
       }
     });
-    //     this.submittedWeights[0].forEach(weight => {
-    //   this.weightChart.data.labels.push(weight.date);
-    //   this.weightChart.data.datasets[0].data.push(weight.weight);
-    //   this.weightChart.update();
-    // });
-    //this.loadSubmittedWeights();
-    // this.submittedWeights.forEach(weight => {
-    //   this.weightChart.data.labels.push(weight.date);
-    //   this.weightChart.data.datasets[0].data.push(weight.weight);
-    //   this.weightChart.update();
-    // })
   }
 
   public loadSubmittedWeights(){
-      this.submittedWeights[0].forEach(weight => {
+      this.submittedWeights.forEach(weight => {
       this.weightChart.data.labels.push(weight.date);
       this.weightChart.data.datasets[0].data.push(weight.weight);
       this.weightChart.update();
     });
   }
   public submitWeight(weight, bodyFat, date){
-    // for (var key in this.submittedWeights[0]) {
-    //   if (this.submittedWeights[0].hasOwnProperty(key) && key == 'weights') {
-    //     for 
-    //     console.log(key + ": " + this.submittedWeights[0][key]);
-    //   }
-    // }
-    //console.log(JSON.parse(this.submittedWeights[0]))
-    console.log(this.submittedWeights)
+    //console.log(this.submittedWeights)
     //this.loadSubmittedWeights()
-    console.log(weight, bodyFat, date);
-    this.weightChart.data.labels.push(date);
-    this.weightChart.data.datasets[0].data.push(weight);
-    this.weightChart.update();
-    // this.bodyFatChart.data.labels.push(date);
-    // this.bodyFatChart.data.datasets[0].data.push(bodyFat);
-    // this.bodyFatChart.update();
+    //console.log(weight, bodyFat, date);
+    // this.weightChart.data.labels.push(date);
+    // this.weightChart.data.datasets[0].data.push(weight);
+    // this.weightChart.update();
+    this.weightToAdd = {
+      'weight': weight,
+      'bodyFat': bodyFat,
+      'date': date
+    }
+    this._weightsService.addWeight(localStorage.getItem('id'), this.weightToAdd)
+      .subscribe(
+        res => {
+          console.log(res)
+        },
+        err => console.log(err)
+      )
   }
-  
 }
