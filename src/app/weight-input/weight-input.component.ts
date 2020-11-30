@@ -23,19 +23,7 @@ export class WeightInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._weightsService.getWeights(localStorage.getItem('id'))  
-      .subscribe(
-        res => {
-          //console.log(res[0].weights)
-          this.submittedWeights = res[0].weights
-          console.log(this.submittedWeights)
-          this.loadSubmittedWeights()
-        },
-        err => console.log(err)
-      );
-      //console.log('id = ' + localStorage.getItem('id'))
-      //console.log(this.submittedWeights);
-      //console.log('submitted weights above')
+    // define chart to display weights
     this.weightChart = new Chart('weightCanvas', {
       type: 'line',
       data: {
@@ -72,22 +60,30 @@ export class WeightInputComponent implements OnInit {
         }
       }
     });
+    this._weightsService.getWeights(localStorage.getItem('id'))  
+      .subscribe(
+        res => {
+          this.submittedWeights = res[0].weights
+          console.log('submitted weights below')
+          console.log(this.submittedWeights)
+          this.loadSubmittedWeights()
+        },
+        err => console.log(err)
+      );
   }
 
   public loadSubmittedWeights(){
+      this.weightChart.data.labels = []
+      this.weightChart.data.datasets[0].data = []
+
       this.submittedWeights.forEach(weight => {
       this.weightChart.data.labels.push(weight.date);
       this.weightChart.data.datasets[0].data.push(weight.weight);
       this.weightChart.update();
     });
   }
+
   public submitWeight(weight, bodyFat, date){
-    //console.log(this.submittedWeights)
-    //this.loadSubmittedWeights()
-    //console.log(weight, bodyFat, date);
-    // this.weightChart.data.labels.push(date);
-    // this.weightChart.data.datasets[0].data.push(weight);
-    // this.weightChart.update();
     this.weightToAdd = {
       'weight': weight,
       'bodyFat': bodyFat,
@@ -96,7 +92,14 @@ export class WeightInputComponent implements OnInit {
     this._weightsService.addWeight(localStorage.getItem('id'), this.weightToAdd)
       .subscribe(
         res => {
-          console.log(res)
+          this._weightsService.getWeights(localStorage.getItem('id'))  
+            .subscribe(
+              res => {
+                this.submittedWeights = res[0].weights
+                this.loadSubmittedWeights()
+            },
+              err => console.log(err)
+          );
         },
         err => console.log(err)
       )
